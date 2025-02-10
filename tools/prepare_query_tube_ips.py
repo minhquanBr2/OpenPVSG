@@ -24,6 +24,10 @@ from mmdet.utils import (build_ddp, build_dp, compat_cfg, get_device,
                          replace_cfg_vals, setup_multi_processes,
                          update_data_root)
 
+import sys
+sys.path.append('..')
+sys.path.append(os.getcwd())
+
 from datasets.datasets.builder import build_dataset
 import models  # noqa: F401
 import datasets  # noqa: F401
@@ -232,7 +236,8 @@ def main():
     with open(pvsg_json, 'r') as f:
         anno = json.load(f)
     video_names = []
-    for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
+    # for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
+    for data_source in ['ego4d']:
         for video_id in anno['split'][data_source][split]:
             video_names.append(video_id)
     for video_name in video_names:

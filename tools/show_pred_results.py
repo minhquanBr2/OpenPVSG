@@ -1,6 +1,9 @@
 import torch, os, cv2
 import numpy as np
 from torch.utils.data import DataLoader
+import sys
+sys.path.append('..')
+sys.path.append(os.getcwd())
 from datasets import PVSGRelationDataset
 from models.relation_head.base import ObjectEncoder, PairProposalNetwork
 from models.relation_head.base import VanillaModel
@@ -21,7 +24,7 @@ data_dir = './data/'
 split = 'val'
 ps_type = 'ips'
 model_name = 'transformer'  # vanilla, filter, conv, transformer
-model_pth = 'epoch_100.pth'
+model_pth = 'latest.pth'
 mark = 'full_result'
 
 mark = model_name + '_' + mark + '_' + model_pth.split('.')[0]
@@ -128,18 +131,23 @@ def show_video(subject_encoder, object_encoder, pair_proposal_model,
                     object_dict[idx] = object_names[int(mask_dict['cid'][0])]
 
             triplet_set = []
-            for idx, result in enumerate(results[:20]):
-                s_id, o_id = result['subject_index'], result['object_index']
-                if s_id in object_dict and o_id in object_dict:
-                    s_name, o_name = object_dict[s_id], object_dict[o_id]
-                    s_id_map, o_id_map = idx2key[s_id], idx2key[o_id]
-                    relation_name = relation_list[result['relation']]
-                    triplet_str = f'{s_name}-{s_id_map} {relation_name} {o_name}-{o_id_map}'
-                    print(triplet_str, flush=True)
-                    triplet_set.append({
-                        'triplet': triplet_str,
-                        'span': result['relation_span'],
-                    })
+            relation_text_save_path = f'{work_dir}/{vid}/relations.txt'
+            print(f"Relations of video: {vid}")
+            with open(relation_text_save_path, 'w') as f:
+                for idx, result in enumerate(results[:20]):
+                    s_id, o_id = result['subject_index'], result['object_index']
+                    if s_id in object_dict and o_id in object_dict:
+                        s_name, o_name = object_dict[s_id], object_dict[o_id]
+                        s_id_map, o_id_map = idx2key[s_id], idx2key[o_id]
+                        relation_name = relation_list[result['relation']]
+                        triplet_str = f'{s_name}-{s_id_map} {relation_name} {o_name}-{o_id_map}'
+                        print(triplet_str, flush=True)
+                        f.write(f'{triplet_str}\n')
+                        triplet_set.append({
+                            'triplet': triplet_str,
+                            'span': result['relation_span'],
+                        })
+            print()
             torch.cuda.empty_cache()
             del concatenated_feats, span_pred, prob
 

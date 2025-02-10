@@ -22,7 +22,8 @@ class PVSGRelationDataset:
             anno = json.load(f)
 
         self.video_ids = []
-        for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
+        # for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
+        for data_source in ['ego4d']:
             for video_id in anno['split'][data_source][split]:
                 self.video_ids.append(video_id)
 
@@ -34,7 +35,8 @@ class PVSGRelationDataset:
 
         self.videos = {}
         for video_anno in anno['data']:
-            self.videos[video_anno['video_id']] = video_anno
+            if video_anno['video_id'] in self.video_ids:
+                self.videos[video_anno['video_id']] = video_anno
 
     def __len__(self):
         return len(self.video_ids)

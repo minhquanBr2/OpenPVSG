@@ -1,4 +1,7 @@
 import sys, argparse
+import os
+sys.path.append('..')
+sys.path.append(os.getcwd())
 from utils.relation_matching import *
 sys.path.append('/mnt/lustre/jkyang/CVPR23/openpvsg')
 from tqdm import tqdm

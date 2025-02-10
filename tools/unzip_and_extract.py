@@ -22,22 +22,22 @@ zip_files = {
         'target': 'ego4d/masks',
         'md5': '218ce689e1e8284e25b50280a5d29612'
     },
-    'EpicKitchen/epic_kitchen_videos.zip': {
-        'target': 'epic_kitchen/videos',
-        'md5': 'b791a71ef24b14721a7b5041190ba4a3'
-    },
-    'EpicKitchen/epic_kitchen_masks.zip': {
-        'target': 'epic_kitchen/masks',
-        'md5': '03757120075de23328a11e56660175f4'
-    },
-    'VidOR/vidor_videos.zip': {
-        'target': 'vidor/videos',
-        'md5': 'fcc1a6f54ef60aa16fab335a6270c960'
-    },
-    'VidOR/vidor_masks.zip': {
-        'target': 'vidor/masks',
-        'md5': '17bfa5ec13235d86273bc9d067776862'
-    },
+    # 'EpicKitchen/epic_kitchen_videos.zip': {
+    #     'target': 'epic_kitchen/videos',
+    #     'md5': 'b791a71ef24b14721a7b5041190ba4a3'
+    # },
+    # 'EpicKitchen/epic_kitchen_masks.zip': {
+    #     'target': 'epic_kitchen/masks',
+    #     'md5': '03757120075de23328a11e56660175f4'
+    # },
+    # 'VidOR/vidor_videos.zip': {
+    #     'target': 'vidor/videos',
+    #     'md5': 'fcc1a6f54ef60aa16fab335a6270c960'
+    # },
+    # 'VidOR/vidor_masks.zip': {
+    #     'target': 'vidor/masks',
+    #     'md5': '17bfa5ec13235d86273bc9d067776862'
+    # },
 }
 
 
