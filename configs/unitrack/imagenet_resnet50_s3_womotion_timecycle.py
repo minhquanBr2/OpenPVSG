@@ -14,7 +14,7 @@ tracker_cfg = dict(
         down_factor=8,
         infer2D=True,
         workers=4,
-        gpu_id=0,
+        gpu_id=1,
         device='cuda'
     ),
     mots=dict(

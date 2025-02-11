@@ -7,6 +7,7 @@ NODELIST=phoenix3
 CONFIG=configs/unitrack/imagenet_resnet50_s3_womotion_timecycle.py
 CHECKPOINT=work_dirs/mask2former_r50_ips/epoch_8.pth
 SPLIT=val
+GPU_ID=1
 WORK_DIR=work_dirs/ips_${SPLIT}_save_qf
 GPUS_PER_NODE=${GPUS_PER_NODE:-1}
 CPUS_PER_TASK=${CPUS_PER_TASK:-3}
@@ -23,4 +24,4 @@ PYTHONPATH="/mnt/lustre/jkyang/CVPR23/openpvsg":$PYTHONPATH \
 #     python -u tools/prepare_query_tube_ips.py ${CONFIG} ${CHECKPOINT} \
 #     --work-dir ${WORK_DIR} --split ${SPLIT} --launcher="none" ${PY_ARGS}
 python -u tools/prepare_query_tube_ips.py ${CONFIG} ${CHECKPOINT} \
-    --work-dir ${WORK_DIR} --split ${SPLIT} --launcher="none" ${PY_ARGS}
+    --work-dir ${WORK_DIR} --split ${SPLIT} --gpu-id ${GPU_ID} --launcher="none" ${PY_ARGS}

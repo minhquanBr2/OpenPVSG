@@ -237,7 +237,8 @@ def main():
         anno = json.load(f)
     video_names = []
     # for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
-    for data_source in ['ego4d']:
+    # for data_source in ['ego4d']:
+    for data_source in ['lsc']:
         for video_id in anno['split'][data_source][split]:
             video_names.append(video_id)
     for video_name in video_names:
