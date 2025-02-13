@@ -23,7 +23,8 @@ class PVSGRelationDataset:
 
         self.video_ids = []
         # for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
-        for data_source in ['ego4d']:
+        # for data_source in ['ego4d']:
+        for data_source in ['lsc']:
             for video_id in anno['split'][data_source][split]:
                 self.video_ids.append(video_id)
 
@@ -45,6 +46,7 @@ class PVSGRelationDataset:
         vid = self.video_ids[index]
         relation_dict = load_pickle(
             os.path.join(self.work_dir, vid, 'relations.pickle'))
+        # print(relation_dict)
         relation_dict['vid'] = vid
         # getting all object features
         feat_list = []
@@ -57,13 +59,16 @@ class PVSGRelationDataset:
         # getting relation info
         pair_list = []
         for relation in relation_dict['relations']:
+            print(relation['subject_index'], relation['object_index'])
             relation['subject_index'] = mapping_dict[relation['subject_index']]
             relation['object_index'] = mapping_dict[relation['object_index']]
+            print(relation['subject_index'], relation['object_index'])
             pair_list.append(
                 [relation['subject_index'], relation['object_index']])
 
         # getting pair info
         relation_dict['pairs'] = pair_list
+        print(relation_dict['pairs'])
 
         if self.return_mask:
             rev_mapping_dict = {v: k for k, v in mapping_dict.items()}
@@ -77,5 +82,7 @@ class PVSGRelationDataset:
                 else:
                     mask_list.append({})
             relation_dict['masks'] = mask_list
+
+        # print(relation_dict)
 
         return relation_dict

@@ -26,6 +26,8 @@ class LoadOutputsFromMask2Former:
         elif video_name.split('_')[0].isdigit() and len(
                 video_name.split('_')[0]) == 4:
             data_source = 'vidor'
+        elif video_name.startswith('LSC'):
+            data_source = 'lsc'
         else:
             data_source = 'ego4d'
 
@@ -33,6 +35,10 @@ class LoadOutputsFromMask2Former:
         self.num_classes = len(classes)
         self.img_files = sorted(
             [str(x) for x in (video_folder.rglob('*.png'))])
+        # change pattern of img_names for images to either png or jpg
+        if len(self.img_files) == 0:
+            self.img_files = sorted(
+                [str(x) for x in (video_folder.rglob('*.jpg'))])
         self.transforms = T.Compose([
             T.ToTensor(),
             T.Normalize(tracker_cfg.common.im_mean, tracker_cfg.common.im_std)

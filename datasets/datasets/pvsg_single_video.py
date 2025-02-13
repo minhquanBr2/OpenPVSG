@@ -47,12 +47,18 @@ class PVSGSingleVideoImageDataset:
         elif video_name.split('_')[0].isdigit() and len(
                 video_name.split('_')[0]) == 4:
             data_source = 'vidor'
+        elif video_name.startswith('LSC'):
+            data_source = 'lsc'
         else:
             data_source = 'ego4d'
 
         # eg. ./data/pvsg_demo/val/images/0010_8610561401
         images_dir = data_root / data_source / 'frames' / video_name
         img_names = sorted([str(x) for x in (images_dir.rglob('*.png'))])
+
+        # change pattern of img_names for images to either png or jpg
+        if len(img_names) == 0:
+            img_names = sorted([str(x) for x in (images_dir.rglob('*.jpg'))])
 
         # find all images
         images = []

@@ -18,7 +18,9 @@ class PVSGRelationAnnotation:
             anno = json.load(f)
 
         self.video_ids = []
-        for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
+        # for data_source in ['vidor', 'epic_kitchen', 'ego4d']:
+        for data_source in ['lsc']:
+        # for data_source in ['ego4d']:
             for video_id in anno['split'][data_source][split]:
                 self.video_ids.append(video_id)
 
@@ -213,13 +215,21 @@ def match_and_process_gt_tubes(vid,
         data_source = 'epic_kitchen'
     elif vid.split('_')[0].isdigit() and len(vid.split('_')[0]) == 4:
         data_source = 'vidor'
+    elif vid.startswith('LSC'):
+        data_source = 'lsc'
     else:
         data_source = 'ego4d'
 
+    # print(f"Pred mask tubes:")
+    # print(pred_mask_tubes)
+
     gt_masks_root_vid = os.path.join(data_dir, data_source, 'masks', vid)
+    print(f"GT masks root vid: {gt_masks_root_vid}")
 
     matching_dict = {}
     object_list = pvsg_dataset[vid]['objects']
+    print(f"Len of object_list for {vid}: {len(object_list)}")
+    print(f"Len of pred_mask_tubes for {vid}: {len(pred_mask_tubes)}")
 
     for frame_id, mask_path in enumerate(
             sorted(Path(gt_masks_root_vid).rglob('*.png'))):
@@ -248,6 +258,7 @@ def match_and_process_gt_tubes(vid,
                         item for item in pred_tube['mask']
                         if list(item.keys())[0] == frame_id)[frame_id]
                     iou = calculate_iou(gt_mask, pred_mask)
+                    # iou = calculate_iou(pred_mask, pred_mask)           # to accept all pred masks
 
                     if iou > 0.5:
                         if instance_id not in matching_dict:
@@ -451,36 +462,38 @@ def process_pairs(pred_relations):
 
 def process_feats_and_relations(pred_relations, pred_feat_tubes, d=256):
 
-    output_list = []
+    # output_list = []
 
-    for item in pred_relations:
-        tube_s_index, tube_o_index, relation, time_span = item
-        video_length = len(pred_feat_tubes[list(pred_feat_tubes.keys())[0]])
+    # for item in pred_relations:
+    #     tube_s_index, tube_o_index, relation, time_span = item
+    #     video_length = len(pred_feat_tubes[list(pred_feat_tubes.keys())[0]])
 
-        relation_span = np.zeros(video_length)
-        for span_range in time_span:
-            for i in range(span_range[0], span_range[1]):
-                relation_span[i] = 1
+    #     relation_span = np.zeros(video_length)
+    #     for span_range in time_span:
+    #         for i in range(span_range[0], span_range[1]):
+    #             relation_span[i] = 1
 
-        # processing subject feature
-        for frame_id in range(video_length):
-            if pred_feat_tubes[tube_s_index][frame_id] is None:
-                relation_span[frame_id] = 0
+    #     # processing subject feature
+    #     for frame_id in range(video_length):
+    #         if pred_feat_tubes[tube_s_index][frame_id] is None:
+    #             relation_span[frame_id] = 0
 
-        # processing object feature
-        for frame_id in range(video_length):
-            if pred_feat_tubes[tube_o_index][frame_id] is None:
-                relation_span[frame_id] = 0
+    #     # processing object feature
+    #     for frame_id in range(video_length):
+    #         if pred_feat_tubes[tube_o_index][frame_id] is None:
+    #             relation_span[frame_id] = 0
 
-        # ignore those without long relation span
-        if sum(relation_span) >= 3:
-            output_dict = {
-                'subject_index': tube_s_index,
-                'object_index': tube_o_index,
-                'relation': relation,
-                'relation_span': relation_span,
-            }
+    #     # ignore those without long relation span
+    #     if sum(relation_span) >= 3:
+    #         output_dict = {
+    #             'subject_index': tube_s_index,
+    #             'object_index': tube_o_index,
+    #             'relation': relation,
+    #             'relation_span': relation_span,
+    #         }
 
-            output_list.append(output_dict)
+    #         output_list.append(output_dict)
 
-    return {'feats': process_feats(pred_feat_tubes), 'relations': output_list}
+    # return {'feats': process_feats(pred_feat_tubes), 'relations': output_list}
+
+    return {'feats': process_feats(pred_feat_tubes), 'relations': []}
